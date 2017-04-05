@@ -29,6 +29,7 @@ function toggleTabs(tabs, isMuted) {
     tabs.forEach(function (tab) {
         chrome.tabs.update(tab.id, {muted: (isMuted ? true : false)});
         document.getElementById(tab.id).innerHTML = getInnerHTML(isMuted ? true : false, tab.title);
+        tab.mutedInfo.muted = isMuted;
     });
 }
 
