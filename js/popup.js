@@ -6,6 +6,27 @@ function getAllTabs(callback) {
     });
 }
 
+/*toggles sound given a tab*/
+function toggleSound(tab) {
+    if (tab.audible) {
+        chrome.tabs.update(tab.id, {muted: true})
+    }
+    else {
+        chrome.tabs.update(tab.id, {muted: false})
+    }
+}
+
+/*Sorry for the bad function name, depending on the boolean mute value, it mutes or unmutes tabs that are passed to it*/
+function muteTabs(tabs) {
+    for (var i = 0; i < tabs.length; i++) {
+        chrome.tabs.update(tabs[i].id, {muted: true})
+    }
+}
+
+function unmuteTab (tabs) {
+    for (var i = 0; i < tabs.length; i++) {
+        chrome.tabs.update(tabs[i].id, {muted: false})
+    }
 
 /*Once the extension is clicked, it calls the getAllTabs method, filters those that have the sound property
  - note that paused videos are not the same as muted videos
