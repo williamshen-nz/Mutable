@@ -1,52 +1,58 @@
-/*returns an array of all tabs. Requires a callback function since it's an asynchronous method*/
-
+/**
+ * This function returns an array of all the tabs of the current window. It requires a callback as it is asynchronous.
+ */
 function getAllTabs(callback) {
     chrome.tabs.query({currentWindow: true}, function (originalTabs) {
         callback(originalTabs);
     });
 }
 
-/*toggles sound given a tab*/
+/**
+ *  Given a single tab, we toggle the sound, update the button icon and set the muted property on the tab
+ */
 function toggleSound(tab) {
-    if (tab.audible) {
-        chrome.tabs.update(tab.id, {muted: true});
-    } else {
+    if (tab.mutedInfo.muted) {
         chrome.tabs.update(tab.id, {muted: false});
+        tab.mutedInfo.muted = false;    // Chrome doesn't automatically do this...
+        document.getElementById(tab.id).innerHTML = getInnerHTML(false, tab.title);
+    } else {
+        chrome.tabs.update(tab.id, {muted: true});
+        tab.mutedInfo.muted = true;     // Chrome doesn't automatically do this...
+        document.getElementById(tab.id).innerHTML = getInnerHTML(true, tab.title);
     }
 }
 
+/**
+ * For each tab of an array of tabs, we toggle it to one value and update the icon accordingly
+ */
 function toggleTabs(tabs, isMuted) {
     tabs.forEach(function (tab) {
-        chrome.tabs.update(tab.id, {muted: (isMuted ? true : false)})
+        chrome.tabs.update(tab.id, {muted: (isMuted ? true : false)});
+        document.getElementById(tab.id).innerHTML = getInnerHTML(isMuted ? true : false, tab.title);
     });
 }
 
-var relevantTabs = [];
-
-/*Once the extension is clicked, it calls the getAllTabs method, filters those that have the sound property
- - note that paused videos are not the same as muted videos
-
- And for each of the tabs it creates a row in the corresponding HTML table
- What raemins is to add something like a button that is in front of each title to mute/unmute the corresponding tab
+/**
+ * This is the code we run when the popup menu is clicked on the Chrome extension toolbar
  */
 document.addEventListener('DOMContentLoaded', function () {
+    // We grab our tab controller and initialise an empty array
+    var tabController = document.getElementById('tab-controller');
+    var relevantTabs = [];
 
-    var tab_controller = document.getElementById('tab-controller');
-
-    /*The array relevantTabs contains a list of tabs all of which are either audible or muted
-     Lookup https://developer.chrome.com/extensions/tabs#type-Tab for the properties of tabs*/
-
+    // We iterate through each of the tabs of the current window
     getAllTabs(function (tabs) {
         tabs.forEach(function (tab) {
-            if (tab.audible) {
+            // Add the tab to the array and append buttons to HTML and add event handlers as required.
+            if (tab.mutedInfo.muted) {
                 relevantTabs.push(tab);
-                tab_controller.insertAdjacentHTML('beforeend', getButtonHTML(false, tab.title, tab.id));
+                tabController.insertAdjacentHTML('beforeend', getButtonHTML(true, tab.title, tab.id));
                 document.getElementById(tab.id).addEventListener('click', function() {
                     toggleSound(tab);
                 });
-            } else if (tab.muted) {
+            } else if (tab.audible) {
                 relevantTabs.push(tab);
-                tab_controller.insertAdjacentHTML('beforeend', getButtonHTML(true, tab.title, tab.id));
+                tabController.insertAdjacentHTML('beforeend', getButtonHTML(false, tab.title, tab.id));
                 document.getElementById(tab.id).addEventListener('click', function() {
                     toggleSound(tab);
                 });
@@ -54,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Add event listeners for the buttons that toggle sound for all the relevant tabs
     document.getElementById('mute-all').addEventListener('click', function() {
         toggleTabs(relevantTabs, true);
     });

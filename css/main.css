@@ -49,21 +49,20 @@ hr {
 }
 
 .wrapper {
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 270px;
+    max-width: 270px;
     margin: 1em auto;
     padding: 0 10px;
 }
 
 .btn-tab {
-    padding: 0;
+    padding: 5px;
     width: 100%;
 }
 
 .tab-title {
-    font-size: 15px;
+    font-size: 14px;
     margin-left: 10px;
-    line-height: 30px;
     vertical-align: middle;
     width: 100%;
 }
