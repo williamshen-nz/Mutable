@@ -9,25 +9,19 @@ function getAllTabs(callback) {
 /*toggles sound given a tab*/
 function toggleSound(tab) {
     if (tab.audible) {
-        chrome.tabs.update(tab.id, {muted: true})
-    }
-    else {
-        chrome.tabs.update(tab.id, {muted: false})
-    }
-}
-
-
-function muteTabs(tabs) {
-    for (var i = 0; i < tabs.length; i++) {
-        chrome.tabs.update(tabs[i].id, {muted: true})
+        chrome.tabs.update(tab.id, {muted: true});
+    } else {
+        chrome.tabs.update(tab.id, {muted: false});
     }
 }
 
-function unmuteTab(tabs) {
-    for (var i = 0; i < tabs.length; i++) {
-        chrome.tabs.update(tabs[i].id, {muted: false})
-    }
+function toggleTabs(tabs, isMuted) {
+    tabs.forEach(function (tab) {
+        chrome.tabs.update(tab.id, {muted: (isMuted ? true : false)})
+    });
 }
+
+var relevantTabs = [];
 
 /*Once the extension is clicked, it calls the getAllTabs method, filters those that have the sound property
  - note that paused videos are not the same as muted videos
@@ -36,28 +30,36 @@ function unmuteTab(tabs) {
  What raemins is to add something like a button that is in front of each title to mute/unmute the corresponding tab
  */
 document.addEventListener('DOMContentLoaded', function () {
-    alert("content loaded")
-    
-    var relevantTabs = [];
-    getAllTabs(function (tabs) {
-        for (var i = 0; i < tabs.length; i++) {
-            if (tabs[i].audible || tabs[i].muted) {
-                relevantTabs.push(tabs[i])
-            }
-        }
-    alert(relevantTabs.length)
-    /*The array relevantTabs contains a list of tabs all of which are either audible or muted
-    Lookup https://developer.chrome.com/extensions/tabs#type-Tab for the properties of tabs
 
-    */
-    })
+    var tab_controller = document.getElementById('tab-controller');
+
+    /*The array relevantTabs contains a list of tabs all of which are either audible or muted
+     Lookup https://developer.chrome.com/extensions/tabs#type-Tab for the properties of tabs*/
+
+    getAllTabs(function (tabs) {
+        tabs.forEach(function (tab) {
+            if (tab.audible) {
+                relevantTabs.push(tab);
+                tab_controller.insertAdjacentHTML('beforeend', getButtonHTML(false, tab.title, tab.id));
+                document.getElementById(tab.id).addEventListener('click', function() {
+                    toggleSound(tab);
+                });
+            } else if (tab.muted) {
+                relevantTabs.push(tab);
+                tab_controller.insertAdjacentHTML('beforeend', getButtonHTML(true, tab.title, tab.id));
+                document.getElementById(tab.id).addEventListener('click', function() {
+                    toggleSound(tab);
+                });
+            }
+        });
+    });
 
     document.getElementById('mute-all').addEventListener('click', function() {
-        document.getElementById('tab-controller').innerHTML = getButtonHTML(true, "MUTED ALL!");
+        toggleTabs(relevantTabs, true);
     });
 
     document.getElementById('unmute-all').addEventListener('click', function() {
-        document.getElementById('tab-controller').innerHTML = getButtonHTML(false, "UNMUTED ALL!");
+        toggleTabs(relevantTabs, false);
     });
 
 });
