@@ -2,7 +2,7 @@
  * This function returns an array of all the tabs of the current window. It requires a callback as it is asynchronous.
  */
 function getAllTabs(callback) {
-    chrome.tabs.query({currentWindow: true}, function (originalTabs) {
+    chrome.tabs.query({}, function (originalTabs) {
         callback(originalTabs);
     });
 }
