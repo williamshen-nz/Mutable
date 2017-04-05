@@ -16,7 +16,7 @@ function toggleSound(tab) {
     }
 }
 
-/*Sorry for the bad function name, depending on the boolean mute value, it mutes or unmutes tabs that are passed to it*/
+
 function muteTabs(tabs) {
     for (var i = 0; i < tabs.length; i++) {
         chrome.tabs.update(tabs[i].id, {muted: true})
@@ -36,33 +36,21 @@ function unmuteTab(tabs) {
  What raemins is to add something like a button that is in front of each title to mute/unmute the corresponding tab
  */
 document.addEventListener('DOMContentLoaded', function () {
-    /*
+    
     var relevantTabs = [];
     getAllTabs(function (tabs) {
         for (var i = 0; i < tabs.length; i++) {
             if (tabs[i].audible || tabs[i].muted) {
-                alert("Found relevant tab");
                 relevantTabs.push(tabs[i])
             }
         }
-        var containerRef = document.getElementById("listOfTabs");
-        console.log(containerRef)
-        for (var i = 0; i < relevantTabs.length; i++) {
-            var newRow = document.createElement("div");
-            newRow.className = "row";
-            containerRef.appendChild(newRow);
+    /*The array relevantTabs contains a list of tabs all of which are either audible or muted
+    Lookup https://developer.chrome.com/extensions/tabs#type-Tab for the properties of tabs
 
-            var tabTitleDiv = document.createElement("div");
-            tabTitleDiv.className = "col-xs-9 bg-info";
-            tabTitleDiv.innerHTML = relevantTabs[i].title;
-            var buttonDiv = document.createElement("div");
-            buttonDiv.className = "col-xs-3 bg-warning";
-            buttonDiv.innerHTML = "blah"
-            newRow.appendChild(tabTitleDiv);
-            newRow.appendChild(buttonDiv);
+    */
         }
     });
-    */
+    
 
     document.getElementById('mute-all').addEventListener('click', function() {
         buildButtonHTML(true, "MUTED ALL!");
