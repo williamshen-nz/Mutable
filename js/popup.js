@@ -8,10 +8,10 @@ function getAllTabs(callback) {
 
 /*toggles sound given a tab*/
 function toggleSound(tab) {
-    if (tab.audible) {
-        chrome.tabs.update(tab.id, {muted: true});
-    } else {
+    if (tab.muted) {
         chrome.tabs.update(tab.id, {muted: false});
+    } else {
+        chrome.tabs.update(tab.id, {muted: true});
     }
 }
 
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById(tab.id).addEventListener('click', function() {
                     toggleSound(tab);
                 });
-            } else if (tab.muted) {
+            } else if (!tab.audible) {
                 relevantTabs.push(tab);
                 tab_controller.insertAdjacentHTML('beforeend', getButtonHTML(true, tab.title, tab.id));
                 document.getElementById(tab.id).addEventListener('click', function() {
