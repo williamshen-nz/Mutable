@@ -27,6 +27,7 @@ function unmuteTab (tabs) {
     for (var i = 0; i < tabs.length; i++) {
         chrome.tabs.update(tabs[i].id, {muted: false})
     }
+}
 
 /*Once the extension is clicked, it calls the getAllTabs method, filters those that have the sound property
  - note that paused videos are not the same as muted videos
@@ -61,3 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
   });
 });
+
+ var i = 0;
+ console.log("loaded!");
+ i++;

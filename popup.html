@@ -1,133 +1,50 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Rhyme</title>
+    <title>Mutable</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: "Open Sans";
-            margin: 0;
-        }
-
-        #header {
-            font-size: 12px;
-            width: 100%;
-            background-color: #424242;
-            line-height: 20px;
-            color: lightgrey;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        #tab-controller {
-            margin: 0 10px;
-        }
-
-        .container-fluid {
-            min-width: 250px;
-            max-width: 250px;
-            margin: 1em auto;
-        }
-
-        .img-mute, .img-unmute {
-            height: 25px;
-            width: 25px;
-            margin-left: 10px;
-        }
-
-        .row-tab {
-            background-color: #EEEEEE;
-            display: flex;
-            overflow: hidden;
-            width: 100%;
-            margin-bottom: 10px;
-            height: 30px;
-        }
-
-        .tab-title {
-            margin-left: 10px;
-            display: inline;
-            width: 100%;
-            line-height: 27px;
-            vertical-align: middle;
-            font-size: 15px;
-        }
-
-        .btn-mute, .btn-unmute {
-            cursor: pointer;
-            border: none;
-            background: none;
-            opacity: 0.6;
-            padding: 0;
-            width: 100%;
-        }
-
-        button:focus {
-            outline: none;
-        }
-
-        .btn-mute:hover, .btn-unmute:hover {
-            opacity: 0.8;
-        }
-
-        .btn-all {
-            padding: 8px 0;
-            width: 48%;
-            font-size: 14px;
-            background-color: #EEEEEE;
-            border: none;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .btn-all:hover {
-            background-color: #E0E0E0;
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
 </head>
+
 <body>
-<div id="header">
+
+<div class="header">
     Mutable v1.0
 </div>
-<div class="container-fluid">
+
+<div class="wrapper">
     <div id="tab-controller">
-        <div class="row-tab">
-            <button class="btn-mute">
-                <span class="tab-status">MUTED</span>
-                <span class="tab-title">Tab Title</span>
-            </button>
-        </div>
-        <div class="row-tab">
-            <button class="btn-unmute">
-                <span class="tab-status">UNMUTED</span>
-                <span class="tab-title">Tab Title</span>
-            </button>
-        </div>
-        <div class="row-tab">
-            <button class="btn-unmute">
-                <span class="tab-status">MUTED</span>
-                <span class="tab-title">Tab Title</span>
-            </button>
-        </div>
-        <div class="row-tab">
-            <button class="btn-unmute">
-                <span class="tab-status">UNMUTED</span>
-                <span class="tab-title">Tab Title</span>
-            </button>
-        </div>
-
-        <hr>
-
-        <button class="btn-all">
-            Mute all tabs
+        <button class="btn-tab">
+            <i class="fa fa-volume-off" aria-hidden="true"></i>
+            <span class="tab-title">Tab Title</span>
         </button>
-        <button class="btn-all" style="float: right;">
-            Unmute all tabs
+
+        <button class="btn-tab">
+            <i class="fa fa-volume-up" aria-hidden="true"></i>
+            <span class="tab-title">Tab Title</span>
+        </button>
+
+        <button class="btn-tab">
+            <i class="fa fa-volume-up" aria-hidden="true"></i>
+            <span class="tab-title">Tab Title</span>
+        </button>
+
+        <button class="btn-tab">
+            <i class="fa fa-volume-off" aria-hidden="true"></i>
+            <span class="tab-title">Tab Title</span>
         </button>
     </div>
+
+    <hr>
+
+    <button class="btn-mute" onclick="buildButtonHTML(true, 'muted all!')">Mute all tabs</button>
+    <button class="btn-mute" onclick="buildButtonHTML(false, 'unmuted all!')">Unmute all tabs</button>
 </div>
 
 <script type="text/javascript" src="js/popup.js"></script>
+<script type="text/javascript" src="js/builder.js"></script>
 </body>
 </html>
