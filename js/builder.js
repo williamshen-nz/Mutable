@@ -9,8 +9,7 @@ const UNMUTED = '<i class="fa fa-volume-up" aria-hidden="true"></i>';
 const TITLE = '<span class="tab-title">';
 const CLOSE = '</span></button>';
 
-function buildButtonHTML(isMuted, title) {
-    document.getElementById('tab-controller').innerHTML
-        = BUTTON + (isMuted ? MUTED : UNMUTED) + TITLE + title + CLOSE;
+function getButtonHTML(isMuted, title) {
+    return BUTTON + (isMuted ? MUTED : UNMUTED) + TITLE + title + CLOSE;
 }
 

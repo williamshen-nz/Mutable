@@ -53,15 +53,11 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
     document.getElementById('mute-all').addEventListener('click', function() {
-        buildButtonHTML(true, "MUTED ALL!");
+        document.getElementById('tab-controller').innerHTML = getButtonHTML(true, "MUTED ALL!");
     });
 
     document.getElementById('unmute-all').addEventListener('click', function() {
-        buildButtonHTML(false, "UNMUTED ALL!");
+        document.getElementById('tab-controller').innerHTML = getButtonHTML(false, "UNMUTED ALL!");
     });
 
 });
-
-var i = 0;
-console.log("loaded!");
-i++;
