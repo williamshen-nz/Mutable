@@ -36,6 +36,7 @@ function unmuteTab(tabs) {
  What raemins is to add something like a button that is in front of each title to mute/unmute the corresponding tab
  */
 document.addEventListener('DOMContentLoaded', function () {
+    alert("content loaded")
     
     var relevantTabs = [];
     getAllTabs(function (tabs) {
@@ -44,13 +45,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 relevantTabs.push(tabs[i])
             }
         }
+    alert(relevantTabs.length)
     /*The array relevantTabs contains a list of tabs all of which are either audible or muted
     Lookup https://developer.chrome.com/extensions/tabs#type-Tab for the properties of tabs
 
     */
-        }
-    });
-    
+    })
 
     document.getElementById('mute-all').addEventListener('click', function() {
         document.getElementById('tab-controller').innerHTML = getButtonHTML(true, "MUTED ALL!");
