@@ -2,27 +2,21 @@
 <html>
 	<head>
 		<title>Rhyme</title>
-		<style>
-      		body{
-        		font-family: "Lucida Grande";
-        		font-size: 12px;
-        		min-width: 300px;
-        		max-width: 400px;
-      			}
-      		table{
-	  		white-space: nowrap;
-	  		overflow: hidden;
-			}
-    	</style>
 		<meta charset="utf-8" />
-		<script type="text/javascript" src="popup.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<style>
+			body {
+				min-width:300px;
+			}
+			.col-xs-9 {
+				white-space: nowrap;
+      			overflow: hidden;
+			}
+		</style>
 	</head>
 	<body>
-		<table id="listOfTabs">	
-			<col width="300px" />
-			<col width="50px" />
-    		<tbody>  		
-   		    </tbody>
-		</table>
+		<div class="container" id="listOfTabs">		
+		</div>
+		<script type="text/javascript" src="js/popup.js"></script>
 	</body>
 </html>
