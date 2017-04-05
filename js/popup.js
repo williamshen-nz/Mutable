@@ -1,8 +1,8 @@
- /*returns an array of all tabs. Requires a callback function since it's an asynchronous method*/
+/*returns an array of all tabs. Requires a callback function since it's an asynchronous method*/
 
 function getAllTabs(callback) {
-    chrome.tabs.query({currentWindow: true}, function(originalTabs) {
-    callback(originalTabs);
+    chrome.tabs.query({currentWindow: true}, function (originalTabs) {
+        callback(originalTabs);
     });
 }
 
@@ -23,7 +23,7 @@ function muteTabs(tabs) {
     }
 }
 
-function unmuteTab (tabs) {
+function unmuteTab(tabs) {
     for (var i = 0; i < tabs.length; i++) {
         chrome.tabs.update(tabs[i].id, {muted: false})
     }
@@ -35,9 +35,10 @@ function unmuteTab (tabs) {
  And for each of the tabs it creates a row in the corresponding HTML table
  What raemins is to add something like a button that is in front of each title to mute/unmute the corresponding tab
  */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    /*
     var relevantTabs = [];
-    getAllTabs(function(tabs) {
+    getAllTabs(function (tabs) {
         for (var i = 0; i < tabs.length; i++) {
             if (tabs[i].audible || tabs[i].muted) {
                 alert("Found relevant tab");
@@ -60,9 +61,19 @@ document.addEventListener('DOMContentLoaded', function() {
             newRow.appendChild(tabTitleDiv);
             newRow.appendChild(buttonDiv);
         }
-  });
+    });
+    */
+
+    document.getElementById('mute-all').addEventListener('click', function() {
+        buildButtonHTML(true, "MUTED ALL!");
+    });
+
+    document.getElementById('unmute-all').addEventListener('click', function() {
+        buildButtonHTML(false, "UNMUTED ALL!");
+    });
+
 });
 
- var i = 0;
- console.log("loaded!");
- i++;
+var i = 0;
+console.log("loaded!");
+i++;
