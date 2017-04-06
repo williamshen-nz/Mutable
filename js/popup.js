@@ -1,8 +1,17 @@
 /**
- * This function returns an array of all the tabs of the current window. It requires a callback as it is asynchronous.
+ * This function returns an array of all the tabs of the all windows. It requires a callback as it is asynchronous.
  */
 function getAllTabs(callback) {
     chrome.tabs.query({}, function (originalTabs) {
+        callback(originalTabs);
+    });
+}
+
+/**
+ * This function returns an array of all the tabs of the current window. It requires a callback as it is asynchronous.
+ */
+function getAllTabsOfCurrentWindow(callback) {
+    chrome.tabs.query({currentWindow: true}, function (originalTabs) {
         callback(originalTabs);
     });
 }
@@ -40,40 +49,83 @@ document.addEventListener('DOMContentLoaded', function () {
     // We grab our tab controller and initialise an empty array
     var tabController = document.getElementById('tab-controller');
     var relevantTabs = [];
+    var currentWindow = false;
 
-    // We iterate through each of the tabs of the current window
-    getAllTabs(function (tabs) {
-        tabs.forEach(function (tab) {
-            // Add the tab to the array and append buttons to HTML and add event handlers as required.
-            
-            if (tab.incognito) {
-                return;
-            }
-
-            if (tab.mutedInfo.muted) {
-                relevantTabs.push(tab);
-                tabController.insertAdjacentHTML('beforeend', getButtonHTML(true, tab.title, tab.id));
-                document.getElementById(tab.id).addEventListener('click', function() {
-                    toggleSound(tab);
-                });
-
-            } else if (tab.audible) {
-                relevantTabs.push(tab);
-                tabController.insertAdjacentHTML('beforeend', getButtonHTML(false, tab.title, tab.id));
-                document.getElementById(tab.id).addEventListener('click', function() {
-                    toggleSound(tab);
-                });
-            }
-
-        });
-
-        // If no relevant tabs found
-        if (relevantTabs.length == 0) {
-            tabController.innerHTML = "No audible/muted tabs found!";
-            document.getElementById('mute-all').style.display='none';
-            document.getElementById('unmute-all').style.display='none';
-        }
+    chrome.storage.sync.get({
+        currentWindowOnly: false
+    }, function (items) {
+        currentWindow = items.currentWindowOnly;
     });
+
+    if (!currentWindow) {
+    // We iterate through each of the tabs of the current window
+        getAllTabs(function (tabs) {
+            tabs.forEach(function (tab) {
+                // Add the tab to the array and append buttons to HTML and add event handlers as required.
+
+                if (tab.incognito) {
+                    return;
+                }
+
+                if (tab.mutedInfo.muted) {
+                    relevantTabs.push(tab);
+                    tabController.insertAdjacentHTML('beforeend', getButtonHTML(true, tab.title, tab.id));
+                    document.getElementById(tab.id).addEventListener('click', function () {
+                        toggleSound(tab);
+                    });
+
+                } else if (tab.audible) {
+                    relevantTabs.push(tab);
+                    tabController.insertAdjacentHTML('beforeend', getButtonHTML(false, tab.title, tab.id));
+                    document.getElementById(tab.id).addEventListener('click', function () {
+                        toggleSound(tab);
+                    });
+                }
+
+            });
+
+            // If no relevant tabs found
+            if (relevantTabs.length === 0) {
+                tabController.innerHTML = "No audible/muted tabs found!";
+                document.getElementById('mute-all').style.display = 'none';
+                document.getElementById('unmute-all').style.display = 'none';
+            }
+        });
+    }
+    else {
+        getAllTabsOfCurrentWindow(function (tabs) {
+            tabs.forEach(function (tab) {
+                // Add the tab to the array and append buttons to HTML and add event handlers as required.
+
+                if (tab.incognito) {
+                    return;
+                }
+
+                if (tab.mutedInfo.muted) {
+                    relevantTabs.push(tab);
+                    tabController.insertAdjacentHTML('beforeend', getButtonHTML(true, tab.title, tab.id));
+                    document.getElementById(tab.id).addEventListener('click', function () {
+                        toggleSound(tab);
+                    });
+
+                } else if (tab.audible) {
+                    relevantTabs.push(tab);
+                    tabController.insertAdjacentHTML('beforeend', getButtonHTML(false, tab.title, tab.id));
+                    document.getElementById(tab.id).addEventListener('click', function () {
+                        toggleSound(tab);
+                    });
+                }
+
+            });
+
+            // If no relevant tabs found
+            if (relevantTabs.length === 0) {
+                tabController.innerHTML = "No audible/muted tabs found!";
+                document.getElementById('mute-all').style.display = 'none';
+                document.getElementById('unmute-all').style.display = 'none';
+            }
+        });
+    }
 
     // Add event listeners for the buttons that toggle sound for all the relevant tabs
     document.getElementById('mute-all').addEventListener('click', function() {

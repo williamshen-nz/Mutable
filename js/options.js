@@ -34,4 +34,4 @@ function restore_options() {
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('current-window').addEventListener('click',
     save_options);
-document.getElementById('url-submission').addEventListener('click', save_options)
+document.getElementById('url-submission').addEventListener('click', save_options);
