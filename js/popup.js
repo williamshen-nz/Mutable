@@ -45,8 +45,10 @@ document.addEventListener('DOMContentLoaded', function () {
     getAllTabs(function (tabs) {
         tabs.forEach(function (tab) {
             // Add the tab to the array and append buttons to HTML and add event handlers as required.
-            if (tab.incognito)
+            
+            if (tab.incognito) {
                 return;
+            }
 
             if (tab.mutedInfo.muted) {
                 relevantTabs.push(tab);
