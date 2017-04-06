@@ -1,12 +1,24 @@
 // Saves options to chrome.storage
 function save_options() {
+  var urls = [];
   var currentWindow = document.getElementById('current-window').checked;
+  var url = document.getElementById('blacklist-url').value;
 
-  chrome.storage.sync.set({
-    currentWindowOnly: currentWindow,
-  }, function() {
-    alert("data saved")
+  /*Check if url is valid?*/
+  
+  chrome.storage.sync.get({
+    blockedURLs: []
+  }, function(items) {
+      urls = items.blockedURLs;
+      urls.push(url);
+      chrome.storage.sync.set({
+      currentWindowOnly: currentWindow,
+      blockedURLs: urls
+      }, function() {
+        alert(urls)
+      });
   });
+
 }
 
 // Restores select box and checkbox state using the preferences
@@ -22,3 +34,4 @@ function restore_options() {
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('current-window').addEventListener('click',
     save_options);
+document.getElementById('url-submission').addEventListener('click', save_options)
