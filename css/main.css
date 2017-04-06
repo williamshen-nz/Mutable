@@ -29,7 +29,6 @@ button:hover {
     background-color: #E0E0E0;
 }
 
-
 hr {
     background: #d0d0d0;
     border: 0;
@@ -48,11 +47,21 @@ hr {
     vertical-align: middle;
 }
 
+#settings {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
 .wrapper {
     min-width: 270px;
     max-width: 270px;
     margin: 1em auto;
     padding: 0 10px;
+}
+
+#tab-controller {
+    font-size: 15px;
+    margin-bottom: 5px;
 }
 
 .btn-tab {
@@ -76,14 +85,4 @@ hr {
 
 #unmute-all {
     float: right;
-}
-
-#settings {
-    position:absolute;
-    padding: 2px;
-    font-size: 9px;
-    height: 15px;
-    width: 40px;
-    top: 5%;
-    left: 89%;
 }

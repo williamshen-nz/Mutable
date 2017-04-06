@@ -7,10 +7,6 @@ function getAllTabs(callback) {
     });
 }
 
-function showSettings(){
-    window.open('options.html');
-}
-
 /**
  *  Given a single tab, we toggle the sound, update the button icon and set the muted property on the tab
  */
@@ -49,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
     getAllTabs(function (tabs) {
         tabs.forEach(function (tab) {
             // Add the tab to the array and append buttons to HTML and add event handlers as required.
+            
             if (tab.incognito) {
                 return;
             }
@@ -69,13 +66,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
         });
+
         // If no relevant tabs found
         if (relevantTabs.length == 0) {
-            tabController.innerHTML = "No audible/muted tabs found!"
+            tabController.innerHTML = "No audible/muted tabs found!";
             document.getElementById('mute-all').style.display='none';
             document.getElementById('unmute-all').style.display='none';
         }
-        
     });
 
     // Add event listeners for the buttons that toggle sound for all the relevant tabs
@@ -87,9 +84,9 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleTabs(relevantTabs, false);
     });
 
-    var settings = document.getElementById('settings');
-    settings.addEventListener('click', function(){
-        showSettings();
-    })
+    // Add event listener to open options page on click of settings cog
+    document.getElementById('settings').addEventListener('click', function(){
+        chrome.tabs.create({ url: "options.html" });
+    });
 
 });
