@@ -7,6 +7,10 @@ function getAllTabs(callback) {
     });
 }
 
+function showSettings(){
+    document.getElementsByClassName('settings-content')[0].classList.toggle("show");
+}
+
 /**
  *  Given a single tab, we toggle the sound, update the button icon and set the muted property on the tab
  */
@@ -78,5 +82,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('unmute-all').addEventListener('click', function() {
         toggleTabs(relevantTabs, false);
     });
+
+    var settings = document.getElementById('settings');
+    settings.addEventListener('click', function(){
+        showSettings();
+    })
 
 });
