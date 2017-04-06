@@ -45,9 +45,8 @@ document.addEventListener('DOMContentLoaded', function () {
     getAllTabs(function (tabs) {
         tabs.forEach(function (tab) {
             // Add the tab to the array and append buttons to HTML and add event handlers as required.
-            if (tab.incognito) {
-                continue;
-            }
+            if (tab.incognito)
+                return;
 
             if (tab.mutedInfo.muted) {
                 relevantTabs.push(tab);
@@ -86,6 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add event listener to open options page on click of settings cog
     document.getElementById('settings').addEventListener('click', function(){
         chrome.tabs.create({ url: "options.html" });
-    })
+    });
 
 });
