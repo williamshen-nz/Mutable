@@ -4,6 +4,7 @@
   "name": "Mutable",
   "description": "This extension mutes/unmutes tabs that are playing audio.",
   "version": "1.0",
+  "options_page": "options.html",
   
   "icons": { "16": "icons/icon16.png",
            "48": "icons/icon48.png",

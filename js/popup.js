@@ -8,7 +8,7 @@ function getAllTabs(callback) {
 }
 
 function showSettings(){
-    document.getElementsByClassName('settings-content')[0].classList.toggle("show");
+    window.open('options.html');
 }
 
 /**

@@ -67,22 +67,6 @@ hr {
     width: 100%;
 }
 
-.settings-content {
-    display: none;
-    position: absolute;
-    left: 207px;
-    top: 17px;
-    background-color: #f9f9f9;
-    color: black;
-    font-size: 9px;
-    min-width: 80px;
-    overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.show {display: block;}
-
 #mute-all, #unmute-all {
     padding: 8px 0;
     width: 48%;
@@ -100,6 +84,6 @@ hr {
     font-size: 9px;
     height: 15px;
     width: 40px;
-    top: 4%;
-    left: 85%;
+    top: 5%;
+    left: 89%;
 }
