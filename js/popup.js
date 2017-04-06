@@ -64,15 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // If no relevant tabs found
         if (relevantTabs.length == 0) {
                 tabController.insertAdjacentHTML('afterbegin', '<span>No audible/muted tabs found!</span>')
+                document.getElementById('mute-all').style.display='none';
+                document.getElementById('unmute-all').style.display='none';
         }
-        // else create the mute all and unmute all buttons
-        else {
-            var wrapper = document.getElementsByClassName("wrapper")[0];
-            wrapper.insertAdjacentHTML('beforeend', '<hr>');
-            wrapper.insertAdjacentHTML('beforeend', '<button id="mute-all">Mute all tabs</button>');
-            wrapper.insertAdjacentHTML('beforeend', '<button id="unmute-all">Unmute all tabs</button>')
-        }
-
+        
     });
 
     // Add event listeners for the buttons that toggle sound for all the relevant tabs
