@@ -63,9 +63,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         // If no relevant tabs found
         if (relevantTabs.length == 0) {
-                tabController.insertAdjacentHTML('afterbegin', '<span>No audible/muted tabs found!</span>')
-                document.getElementById('mute-all').style.display='none';
-                document.getElementById('unmute-all').style.display='none';
+            tabController.insertAdjacentHTML('afterbegin', '<span>No audible/muted tabs found!</span>')
+            document.getElementById('mute-all').style.display='none';
+            document.getElementById('unmute-all').style.display='none';
         }
         
     });
