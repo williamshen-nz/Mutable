@@ -3,6 +3,10 @@ function save_options() {
   var urls = [];
   var currentWindow = document.getElementById('current-window').checked;
   var url = document.getElementById('blacklist-url').value;
+  var toBeAdded = true;
+  if (url === "" || url === null) {
+      toBeAdded = false;
+  }
 
   /*Check if url is valid?*/
   
@@ -10,7 +14,9 @@ function save_options() {
     blockedURLs: []
   }, function(items) {
       urls = items.blockedURLs;
-      urls.push(url);
+      if(toBeAdded) {
+          urls.push(url);
+      }
       chrome.storage.sync.set({
       currentWindowOnly: currentWindow,
       blockedURLs: urls
