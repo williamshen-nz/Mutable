@@ -17,6 +17,7 @@ hr {
 }
 
 p {
+    font-size: 14px;
     margin-top: 0;
 }
 
@@ -24,9 +25,13 @@ input {
     padding: 0;
 }
 
-textarea {
+select {
     width: 100%;
-    resize: none;
+    padding: 2px;
+}
+
+select:focus {
+    outline: none;
 }
 
 .title {
@@ -37,7 +42,7 @@ textarea {
 
 .wrapper {
     margin: 1em auto;
-    width: 400px;
+    width: 480px;
 }
 
 #blacklist-url {
@@ -51,4 +56,18 @@ textarea {
 
 #blacklisted {
     height: 100px;
+    margin-bottom: 5px;
+}
+
+.success, .failure {
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.success {
+    color: green;
+}
+
+.failure {
+    color: red;
 }
