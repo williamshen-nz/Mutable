@@ -6,6 +6,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/options.css">
+    <style>
+        /* Remove margins and padding from the list */
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        /* Style the list items */
+        ul li {
+            cursor: pointer;
+            position: relative;
+            padding: 6px 8px 6px 15px;
+            background: #eee;
+            font-size: 12px;
+            transition: 0.2s;
+
+            /* make the list items unselectable */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Set all odd list items to a different color (zebra-stripes) */
+        ul li:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+        /* Darker background-color on hover */
+        ul li:hover {
+            background: #ddd;
+        }
+
+        /* When clicked on, add a background color and strike out text */
+        ul li.checked {
+            background: #888;
+            color: #fff;
+        }
+
+        /* Style the close button */
+        .close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 6px 16px 6px 16px
+        }
+
+        .close:hover {
+            background-color: #f44336;
+            color: white;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -37,12 +91,9 @@
 
         <h3>Blacklisted Sites</h3>
         <p>Select the row for the website you want to remove, and then click 'Remove'</p>
-        <label>
-            <textarea id="blacklisted">
 
-            </textarea>
-            <input type="submit" id="url-remove" value="Remove">
-        </label>
+        <ul id="blacklisted">
+        </ul>
     </div>
 </div>
 

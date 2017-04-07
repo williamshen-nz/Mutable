@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Add the tab to the array and append buttons to HTML and add event handlers as required.
 
                     if (tab.incognito) {
-                    return;
+                        return;
                     }
 
                     if (tab.mutedInfo.muted) {
