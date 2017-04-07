@@ -49,8 +49,7 @@ function saveWindowOption() {
 
 function addBlacklistURL() {
     var url = document.getElementById('blacklist-url').value;
-    url = url.replace(/\s/g, ''); // remove all white space from the url
-    if (url.length == 0 || !validURL()) {
+    if (url.length == 0 || !validURL(url)) {
         insertHTML('blacklist-add', INVALID);
         return;
     }
