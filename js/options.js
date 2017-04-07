@@ -1,134 +1,130 @@
 /*
-* Missing in this section:
-*
-* 1. check the validity of the url being added
-* */
+ * Missing in this section:
+ *
+ * 1. check the validity of the url being added
+ * */
 
+const SUCCESS = '<p class="success">Successfully saved!</p>';
+const INVALID = '<p class="failure">Invalid URL!</p>';
+const EXISTS = '<p class="failure">URL already exists!</p>';
+const ADDED = '<p class="success">Successfully added!</p>';
+const REMOVED = '<p class="success">Successfully removed!</p>';
+const ERROR = '<p class="failure">Error! Please refresh the page and try again.</p>';
+const NO_ITEM = '<p class="failure">No item selected!</p>';
 
-// Saves options to chrome.storage
-function save_options() {
-  var urls = [];
-  var currentWindow = document.getElementById('current-window').checked;
-  var url = document.getElementById('blacklist-url').value;
-  var toBeAdded = true;
-  url = url.replace(/\s/g, ""); // remove all white space from the url
-    if (url === "" || url === null) {
-      toBeAdded = false;
-  }
-
-  /*Check if url is valid?*/
-  
-  chrome.storage.sync.get({
-    blockedURLs: []
-  }, function(items) {
-      urls = items.blockedURLs;
-      if (urls.indexOf(url) > -1) toBeAdded = false; // do not add duplicates
-      if(toBeAdded) {
-          urls.push(url);
-      }
-      chrome.storage.sync.set({
-      currentWindowOnly: currentWindow,
-      blockedURLs: urls
-      }, function() {
-        console.log("The blacklisted urls are " + urls);
-        if (toBeAdded) appendURLToList(url);
-      });
-  });
-
+function validURL() {
+    return true;
 }
 
-
-function clearTextBar(){
-    document.getElementById('blacklist-url').value = '';
+function insertHTML(id, html) {
+    document.getElementById(id).insertAdjacentHTML('beforeend', html)
 }
 
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
-function restore_options() {
-    var blocked = [];
-
+function restoreOptions() {
     chrome.storage.sync.get({
-      currentWindowOnly: false,
-      blockedURLs: []
-    }, function(items) {
-    document.getElementById('current-window').checked = items.currentWindowOnly;
-    blocked = items.blockedURLs;
-
-    for (var i = 0; i < blocked.length; i++) {
-        appendURLToList(blocked[i]);
-    }
-
+        currentWindowOnly: false,
+        blockedURLs: []
+    }, function (items) {
+        document.getElementById('current-window').checked = items.currentWindowOnly;
+        updateBlacklist(items.blockedURLs, false);
     });
 }
 
-/*only to be called once, when the document is loaded. It adds the close option in front of the existing urls*/
-function addCrosses(listOfURLs){
-    var i;
-    for (i = 0; i < listOfURLs.length; i++) {
-        var span = document.createElement("span");
-        var txt = document.createTextNode("\u00D7"); // The cross symbol
-        span.className = "close";
-        span.appendChild(txt);
-        listOfURLs[i].appendChild(span);
-    }
-}
-
-
-function appendURLToList(url){
-    var li = document.createElement("li");
-    var urlText = document.createTextNode(url);
-    li.appendChild(urlText);
-    document.getElementById("blacklisted").appendChild(li);
-    var close = document.getElementsByClassName("close");
-
-    var span = document.createElement("span");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "close";
-    span.appendChild(txt);
-    li.appendChild(span);
-    closeButtonEventListeners();
-
-}
-
-function removeURL(url){
+function saveWindowOption() {
     chrome.storage.sync.get({
+        currentWindowOnly: false,
         blockedURLs: []
-    }, function(items) {
-        urls = items.blockedURLs;
-        var index = urls.indexOf(url);
-        if (index > -1) {
-            urls.splice(index, 1);
-        }else {
-            console.log("Something is wrong here. The url to be deleted cannot be found.")
-        }
-        chrome.storage.sync.set({
-            blockedURLs: urls
-        }, function() {
-            console.log("Removed "+ url + ", the remaining ones are " + urls)
+    }, function (obj) {
+        var checked = document.getElementById('current-window').checked;
+        chrome.storage.sync.set({currentWindowOnly: checked, blockedURLs: obj.blockedURLs}, function () {
+            insertHTML('general', SUCCESS);
         });
     });
 }
 
-function closeButtonEventListeners(){
-    var close = document.getElementsByClassName("close");
-    for (i = 0; i < close.length; i++) {
-        close[i].onclick = function() {
-            var div = this.parentElement;
-            div.style.display = "none";
-            removeURL(div.childNodes.item(0).nodeValue);
+function addBlacklistURL() {
+    var url = document.getElementById('blacklist-url').value;
+    url = url.replace(/\s/g, ''); // remove all white space from the url
+    if (url.length == 0 || !validURL()) {
+        insertHTML('blacklist-add', INVALID);
+        return;
+    }
+
+    chrome.storage.sync.get({
+        currentWindowOnly: false,
+        blockedURLs: []
+    }, function (obj) {
+        var urls = obj.blockedURLs;
+        if (urls.indexOf(url) > -1) {
+            insertHTML('blacklist-add', EXISTS);
+            return;
         }
+
+        urls.push(url);
+        chrome.storage.sync.set({
+            currentWindowOnly: obj.currentWindowOnly,
+            blockedURLs: urls
+        }, function () {
+            insertHTML('blacklist-add', ADDED);
+            updateBlacklist(url, true);
+        });
+    });
+}
+
+function updateBlacklist(url, newURL) {
+    document.getElementById('blacklist-url').value = '';
+    if (newURL) {
+        var html = '<option value=' + url + '>' + url + '</option>';
+        document.getElementById('blacklisted').innerHTML += html;
+    } else {
+        var total = '';
+        url.forEach(function (url) {
+            total += '<option value=' + url + '>' + url + '</option>\n';
+        });
+        document.getElementById('blacklisted').innerHTML = total;
     }
 }
 
-document.addEventListener('DOMContentLoaded', function(){
-    restore_options();
-    document.getElementById('current-window').addEventListener('click', save_options);
-    document.getElementById('url-submission').addEventListener('click', function() {
-        save_options();
-        clearTextBar();
+function removeClick() {
+    var options = document.getElementById('blacklisted').selectedOptions;
+    if (options.length == 0)
+        insertHTML('blacklist-remove', NO_ITEM);
+    for (var i = 0; i < options.length; i++)
+        removeURL(options[i].value);
+}
+
+function removeURL(url) {
+    chrome.storage.sync.get({ blockedURLs: [] }, function (obj) {
+        var urls = obj.blockedURLs;
+        var index = urls.indexOf(url);
+
+        if (index > -1) {
+            urls.splice(index, 1);
+        } else {
+            insertHTML('blacklist-remove', ERROR);
+            return;
+        }
+
+        chrome.storage.sync.set({ blockedURLs: urls }, function () {
+            insertHTML('blacklist-remove', REMOVED);
+            updateBlacklist(urls, false);
+        });
     });
-    var myNodelist = document.getElementsByTagName("li");
-    addCrosses(myNodelist);
-    closeButtonEventListeners();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    restoreOptions();
+
+    document.getElementById('current-window').addEventListener('click', function () {
+        saveWindowOption();
+    });
+
+    document.getElementById('url-submission').addEventListener('click', function () {
+        addBlacklistURL();
+    });
+
+    document.getElementById('link-remove').addEventListener('click', function () {
+        removeClick();
+    });
 });
 
