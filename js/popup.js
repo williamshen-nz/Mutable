@@ -51,14 +51,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var relevantTabs = [];
     var currentWindow = false;
 
-    chrome.storage.sync.get({ currentWindowOnly: false }, function (items) {
+    chrome.storage.sync.get({currentWindowOnly: false}, function (items) {
         currentWindow = items.currentWindowOnly;
 
         if (!currentWindow) {
-        // We iterate through each of the tabs of the current window
+            // We iterate through each of the tabs of the current window
             getAllTabs(function (tabs) {
                 tabs.forEach(function (tab) {
-                // Add the tab to the array and append buttons to HTML and add event handlers as required.
+                    // Add the tab to the array and append buttons to HTML and add event handlers as required.
 
                     if (tab.incognito) {
                         return;
@@ -124,17 +124,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Add event listeners for the buttons that toggle sound for all the relevant tabs
-    document.getElementById('mute-all').addEventListener('click', function() {
+    document.getElementById('mute-all').addEventListener('click', function () {
         toggleTabs(relevantTabs, true);
     });
 
-    document.getElementById('unmute-all').addEventListener('click', function() {
+    document.getElementById('unmute-all').addEventListener('click', function () {
         toggleTabs(relevantTabs, false);
     });
 
     // Add event listener to open options page on click of settings cog
-    document.getElementById('settings').addEventListener('click', function(){
-        chrome.tabs.create({ url: "options.html" });
+    document.getElementById('settings').addEventListener('click', function () {
+        chrome.tabs.create({url: "options.html"});
     });
 
 });

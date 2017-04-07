@@ -12,8 +12,13 @@ const REMOVED = '<p class="success">Successfully removed!</p>';
 const ERROR = '<p class="failure">Error! Please refresh the page and try again.</p>';
 const NO_ITEM = '<p class="failure">No item selected!</p>';
 
-function validURL() {
-    return true;
+function validURL(url) {
+    var pattern = new RegExp('((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+        '((\\d{1,3}\\.){3}\\d{1,3}))' +
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+        '(\\?[;&a-z\\d%_.~+=-]*)?' +
+        '(\\#[-a-z\\d_]*)?$', 'i');
+    return pattern.test(url)
 }
 
 function insertHTML(id, html) {
@@ -94,7 +99,7 @@ function removeClick() {
 }
 
 function removeURL(url) {
-    chrome.storage.sync.get({ blockedURLs: [] }, function (obj) {
+    chrome.storage.sync.get({blockedURLs: []}, function (obj) {
         var urls = obj.blockedURLs;
         var index = urls.indexOf(url);
 
@@ -105,7 +110,7 @@ function removeURL(url) {
             return;
         }
 
-        chrome.storage.sync.set({ blockedURLs: urls }, function () {
+        chrome.storage.sync.set({blockedURLs: urls}, function () {
             insertHTML('blacklist-remove', REMOVED);
             updateBlacklist(urls, false);
         });
