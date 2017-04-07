@@ -39,7 +39,7 @@ function save_options() {
 
 
 function clearTextBar(){
-    var bar = document.getElementById('blacklist-url').value = '';
+    document.getElementById('blacklist-url').value = '';
 }
 
 // Restores select box and checkbox state using the preferences
