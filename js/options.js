@@ -119,6 +119,11 @@ document.addEventListener('DOMContentLoaded', function () {
         saveWindowOption();
     });
 
+    document.getElementById('blacklist-url').addEventListener('keydown', function (e) {
+        if (e.keyCode == '13')
+            addBlacklistURL();
+    });
+
     document.getElementById('url-submission').addEventListener('click', function () {
         addBlacklistURL();
     });
