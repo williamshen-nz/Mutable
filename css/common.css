@@ -7,6 +7,9 @@
 
 * {
     font-family: Roboto, Calibri, Avenir, serif;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 body {
