@@ -22,7 +22,18 @@ function validURL(url) {
 }
 
 function insertHTML(id, html) {
-    document.getElementById(id).insertAdjacentHTML('beforeend', html)
+    var elem = document.getElementById(id);
+    /*if last element belongs to class success or failure remove it*/
+    if (elem.lastElementChild.className === 'success' || elem.lastElementChild.className === 'failure') {
+        elem.lastElementChild.remove();
+    }
+    elem.insertAdjacentHTML('beforeend', html);
+    setTimeout(function(){
+        if (elem.lastElementChild.className === 'success' || elem.lastElementChild.className === 'failure') {
+            elem.lastElementChild.remove();
+        }
+    },1000);
+
 }
 
 function restoreOptions() {
