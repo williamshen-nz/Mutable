@@ -1,3 +1,5 @@
+var blockedDomains = [];
+
 /*
 * Got this from http://stackoverflow.com/a/23945027/6063947
 * */
@@ -42,14 +44,15 @@ function muteNewTab(tab){
 
 function muteNewURL(tabId, changeInfo, tab){
     console.log("A refresh has been detected");
+    console.log("The following are blocked" + blockedDomains);
     if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && tab.audible) { // if the tab's url belongs to the blocked ones
         console.log("Tab satisifes properties");
         muteTab(tab);
     }
 }
 
+
 function begin() {
-    blockedDomains = [];
     chrome.storage.sync.get({blockedURLs: []}, function(object){
         for (var i = 0; i < object.blockedURLs.length; i++) {
             blockedDomains[i] = getDomain(object.blockedURLs[i]);
@@ -63,6 +66,10 @@ function begin() {
             console.log('Detected change in urls. The changes are ' + changes.blockedURLs.newValue);
         }
         chrome.storage.sync.get({blockedURLs: []}, function(obj){
+            blockedDomains = [];
+            for (var i = 0; i < obj.blockedURLs.length; i++) {
+                blockedDomains[i] = getDomain(obj.blockedURLs[i]);
+            }
             chrome.tabs.onCreated.removeListener(muteNewTab);
             chrome.tabs.onUpdated.removeListener(muteNewURL);
             chrome.tabs.onCreated.addListener(muteNewTab);
