@@ -32,6 +32,9 @@ function getDomain(url) {
 }
 
 function muteTab(tab){
+    if (tab.icognito){
+        return;
+    }
     chrome.tabs.update(tab.id, {muted: true});
     tab.mutedInfo.muted = true;
 }
