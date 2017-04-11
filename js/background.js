@@ -1,8 +1,8 @@
 var blockedDomains = [];
 
 /*
-* Got this from http://stackoverflow.com/a/23945027/6063947
-* */
+ * Got this from http://stackoverflow.com/a/23945027/6063947
+ * */
 function extractHostname(url) {
     var hostname;
     //find & remove protocol (http, ftp, etc.) and get the hostname
@@ -31,21 +31,21 @@ function getDomain(url) {
     return domain;
 }
 
-function muteTab(tab){
-    if (tab.icognito){
+function muteTab(tab) {
+    if (tab.icognito) {
         return;
     }
     chrome.tabs.update(tab.id, {muted: true});
     tab.mutedInfo.muted = true;
 }
 
-function muteNewTab(tab){
+function muteNewTab(tab) {
     if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && tab.audible) { // if the new tab's url belongs to the blocked ones
         muteTab(tab);
     }
 }
 
-function muteNewURL(tabId, changeInfo, tab){
+function muteNewURL(tabId, changeInfo, tab) {
     console.log("A refresh has been detected");
     console.log("The following are blocked" + blockedDomains);
     if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && tab.audible) { // if the tab's url belongs to the blocked ones
@@ -56,7 +56,7 @@ function muteNewURL(tabId, changeInfo, tab){
 
 
 function begin() {
-    chrome.storage.sync.get({blockedURLs: []}, function(object){
+    chrome.storage.sync.get({blockedURLs: []}, function (object) {
         for (var i = 0; i < object.blockedURLs.length; i++) {
             blockedDomains[i] = getDomain(object.blockedURLs[i]);
         }
@@ -64,11 +64,11 @@ function begin() {
         chrome.tabs.onUpdated.addListener(muteNewURL);
     });
 
-    chrome.storage.onChanged.addListener(function(changes, areaName){
-        if(changes.blockedURLs !== undefined) {
+    chrome.storage.onChanged.addListener(function (changes, areaName) {
+        if (changes.blockedURLs !== undefined) {
             console.log('Detected change in urls. The changes are ' + changes.blockedURLs.newValue);
         }
-        chrome.storage.sync.get({blockedURLs: []}, function(obj){
+        chrome.storage.sync.get({blockedURLs: []}, function (obj) {
             blockedDomains = [];
             for (var i = 0; i < obj.blockedURLs.length; i++) {
                 blockedDomains[i] = getDomain(obj.blockedURLs[i]);
