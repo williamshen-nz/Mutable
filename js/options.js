@@ -28,11 +28,11 @@ function insertHTML(id, html) {
         elem.lastElementChild.remove();
     }
     elem.insertAdjacentHTML('beforeend', html);
-    setTimeout(function(){
+    setTimeout(function () {
         if (elem.lastElementChild.className === 'success' || elem.lastElementChild.className === 'failure') {
             elem.lastElementChild.remove();
         }
-    },1000);
+    }, 3000);
 
 }
 
