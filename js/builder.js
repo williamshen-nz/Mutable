@@ -23,6 +23,6 @@ function getButtonHTML(isMuted, title, id) {
  * for an existing button which we edit.
  */
 function getInnerHTML(isMuted, title) {
-    return (isMuted ? MUTED: UNMUTED) + TITLE + title + '</span>';
+    return (isMuted ? MUTED : UNMUTED) + TITLE + title + '</span>';
 }
 

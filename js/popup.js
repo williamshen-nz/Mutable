@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
             getAllTabs(function (tabs) {
                 tabs.forEach(function (tab) {
                     // Add the tab to the array and append buttons to HTML and add event handlers as required.
-
                     if (tab.incognito) {
                         return;
                     }
@@ -92,7 +91,6 @@ document.addEventListener('DOMContentLoaded', function () {
             getAllTabsOfCurrentWindow(function (tabs) {
                 tabs.forEach(function (tab) {
                     // Add the tab to the array and append buttons to HTML and add event handlers as required.
-
                     if (tab.incognito) {
                         return;
                     }
@@ -136,5 +134,4 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('settings').addEventListener('click', function () {
         chrome.tabs.create({url: "options.html"});
     });
-
 });

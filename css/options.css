@@ -58,7 +58,7 @@ select:focus {
     text-align: center;
     background-color: #424242;
     color: lightgrey;
-    box-shadow: 0 4px 2px -2px rgba(0,0,0,.5);
+    box-shadow: 0 4px 2px -2px rgba(0, 0, 0, .5);
     margin-bottom: 35px;
 }
 
