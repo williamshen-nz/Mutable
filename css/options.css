@@ -103,3 +103,20 @@ select:focus {
     color: red;
 }
 
+#copyright {
+    font-size: 14px;
+}
+
+#copyright span {
+    float: left;
+}
+
+#copyright a, #copyright a:visited {
+    color: #304FFE;
+    float: right;
+    text-decoration: none;
+}
+
+#copyright a:hover {
+    text-decoration: underline;
+}
