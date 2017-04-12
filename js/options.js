@@ -22,6 +22,22 @@ function validURL(url) {
 }
 
 /**
+ * Clean a URL and return root domain (including sub-domains)
+ * Modified from: http://stackoverflow.com/a/23945027/6063947
+ */
+function getDomain(url) {
+    // Find and remove the protocol to get the hostname
+    var hostname = (url.indexOf("://") > -1) ? url.split('/')[2] : url.split('/')[0];
+    // Extract the root domain
+    var domain = hostname.split(':')[0],
+        splitArr = domain.split('.'),
+        arrLen = splitArr.length;
+    if (arrLen > 2)
+        domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+    return domain;
+}
+
+/**
  * Insert a message into the given `div` wrapper
  */
 function insertHTML(id, html) {
@@ -69,9 +85,7 @@ function saveWindowOption() {
  */
 function addBlacklistURL() {
     var url = document.getElementById('blacklist-url').value;
-    // If url contains `://` (i.e. http, https) we automatically remove it for the user
-    if (url.indexOf("://") > -1)
-        url = url.split('/')[2];
+    url = getDomain(url);   // clean the URL to its domain
     // If the url is invalid, show a message and exit the function
     if (url.length == 0 || !validURL(url)) {
         insertHTML('blacklist-add', INVALID);

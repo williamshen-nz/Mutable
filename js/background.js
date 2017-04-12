@@ -1,5 +1,5 @@
 // Variable to store all the blocked domain names
-var blockedDomains;
+var blockedDomains = [];
 
 /**
  * Given a tab as argument, the function sets its muted property to true
