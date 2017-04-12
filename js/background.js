@@ -47,6 +47,7 @@ function begin() {
             object.blockedURLs.forEach(function(url) {
                 blockedDomains.push(url);
             });
+            console.log(blockedDomains);
             // Remove any existing event listeners
             chrome.tabs.onCreated.removeListener(muteNewTab);
             chrome.tabs.onUpdated.removeListener(muteNewURL);

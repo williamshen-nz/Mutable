@@ -12,8 +12,7 @@ const NO_ITEM = '<p class="failure">No item selected!</p>';
  * Check if a URL is valid using a regular expression
  */
 function validURL(url) {
-    var pattern = new RegExp('^(https?:\\/\\/)?' +
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+    var pattern = new RegExp('((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
         '((\\d{1,3}\\.){3}\\d{1,3}))' +
         '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
         '(\\?[;&a-z\\d%_.~+=-]*)?' +
