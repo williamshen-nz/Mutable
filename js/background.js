@@ -10,7 +10,15 @@ function getDomain(url) {
         url = 'https://' + url;
     var a = document.createElement('a');
     a.setAttribute('href', url);
-    return a.hostname;
+
+    var domain = a.hostname,
+        splitArr = domain.split('.'),
+        arrLen = splitArr.length;
+
+    if (arrLen > 2) {
+        domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+    }
+    return domain;
 }
 
 /**
@@ -19,6 +27,7 @@ function getDomain(url) {
 function muteTab(tab) {
     chrome.tabs.update(tab.id, {muted: true});
     tab.mutedInfo.muted = true;
+    tab.audible = false;
 }
 
 /**
@@ -34,8 +43,12 @@ function muteNewTab(tab) {
  */
 function muteNewURL(tabId, changeInfo, tab) {
     console.log("mute new url");
-    if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && changeInfo.audible && tab.audible)
+    console.log(blockedDomains);
+    console.log(tab.url + " " + getDomain(tab.url));
+    if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && changeInfo.audible && tab.audible) {
+        console.log("tab satisifes properties. URl is " + tab.url);
         muteTab(tab);
+    }
 }
 
 /**
