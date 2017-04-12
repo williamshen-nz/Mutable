@@ -48,7 +48,7 @@ function muteNewTab(tab) {
 function muteNewURL(tabId, changeInfo, tab) {
     console.log("A refresh has been detected");
     console.log("The following are blocked" + blockedDomains);
-    if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && tab.audible) { // if the tab's url belongs to the blocked ones
+    if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && tab.audible && changeInfo.url !== undefined) { // if the tab's url belongs to the blocked ones
         console.log("Tab satisifes properties");
         muteTab(tab);
     }
