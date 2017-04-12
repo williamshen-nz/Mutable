@@ -26,15 +26,9 @@ function validURL(url) {
  * Modified from: http://stackoverflow.com/a/23945027/6063947
  */
 function getDomain(url) {
-    // Find and remove the protocol to get the hostname
-    var hostname = (url.indexOf("://") > -1) ? url.split('/')[2] : url.split('/')[0];
-    // Extract the root domain
-    var domain = hostname.split(':')[0],
-        splitArr = domain.split('.'),
-        arrLen = splitArr.length;
-    if (arrLen > 2)
-        domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
-    return domain;
+    var a = document.createElement('a');
+    a.setAttribute('href', url);
+    return a.hostname;
 }
 
 /**
