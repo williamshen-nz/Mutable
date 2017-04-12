@@ -2,6 +2,18 @@
 var blockedDomains = [];
 
 /**
+ * Clean a URL and return root domain (including sub-domains)
+ * Modified from: http://stackoverflow.com/questions/25703360/
+ */
+function getDomain(url) {
+    if (url.indexOf('://') === -1)
+        url = 'https://' + url;
+    var a = document.createElement('a');
+    a.setAttribute('href', url);
+    return a.hostname;
+}
+
+/**
  * Given a tab as argument, the function sets its muted property to true
  */
 function muteTab(tab) {
@@ -21,6 +33,7 @@ function muteNewTab(tab) {
  * If a tab is updated, we check if the tab needs to be muted and call the muteTab function as required
  */
 function muteNewURL(tabId, changeInfo, tab) {
+    console.log("mute new url");
     if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && changeInfo.audible && tab.audible)
         muteTab(tab);
 }
@@ -44,7 +57,7 @@ function begin() {
     chrome.storage.onChanged.addListener(function (changes, areaName) {
         chrome.storage.sync.get({blockedURLs: []}, function (obj) {
             blockedDomains = [];
-            object.blockedURLs.forEach(function(url) {
+            obj.blockedURLs.forEach(function(url) {
                 blockedDomains.push(url);
             });
             console.log(blockedDomains);
