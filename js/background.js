@@ -15,7 +15,7 @@ function getDomain(url) {
         hostname = url.split('/')[0];
     }
 
-    var domain = hostname.split(':')[0];
+    var domain = hostname.split(':')[0],
         splitArr = domain.split('.'),
         arrLen = splitArr.length;
 
