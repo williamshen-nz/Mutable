@@ -1,19 +1,19 @@
-/*
- * Missing in this section:
- *
- * 1. check the validity of the url being added
- * */
-
+/**
+ * Constants for the messages when updating options
+ */
 const SUCCESS = '<p class="success">Successfully saved!</p>';
 const INVALID = '<p class="failure">Invalid URL!</p>';
 const EXISTS = '<p class="failure">URL already exists!</p>';
 const ADDED = '<p class="success">Successfully added!</p>';
 const REMOVED = '<p class="success">Successfully removed!</p>';
-const ERROR = '<p class="failure">Error! Please refresh the page and try again.</p>';
 const NO_ITEM = '<p class="failure">No item selected!</p>';
 
+/**
+ * Check if a URL is valid using a regular expression
+ */
 function validURL(url) {
-    var pattern = new RegExp('((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+    var pattern = new RegExp('^(https?:\\/\\/)?' +
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
         '((\\d{1,3}\\.){3}\\d{1,3}))' +
         '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
         '(\\?[;&a-z\\d%_.~+=-]*)?' +
@@ -21,77 +21,87 @@ function validURL(url) {
     return pattern.test(url)
 }
 
+/**
+ * Insert a message into the given `div` wrapper
+ */
 function insertHTML(id, html) {
-    var elem = document.getElementById(id);
-    /*if last element belongs to class success or failure remove it*/
-    if (elem.lastElementChild.className === 'success' || elem.lastElementChild.className === 'failure') {
-        elem.lastElementChild.remove();
+    var wrapper = document.getElementById(id);
+    // If the last element is already a message, we remove it
+    if (wrapper.lastElementChild.className === 'success' || wrapper.lastElementChild.className === 'failure') {
+        wrapper.lastElementChild.remove();
     }
-    elem.insertAdjacentHTML('beforeend', html);
+    wrapper.insertAdjacentHTML('beforeend', html);
+    // Remove the message after 3 seconds
     setTimeout(function () {
-        if (elem.lastElementChild.className === 'success' || elem.lastElementChild.className === 'failure') {
-            elem.lastElementChild.remove();
+        if (wrapper.lastElementChild.className === 'success' || wrapper.lastElementChild.className === 'failure') {
+            wrapper.lastElementChild.remove();
         }
     }, 3000);
-
 }
 
+/**
+ * Get the stored user options and load them into the checkbox and select option box
+ */
 function restoreOptions() {
     chrome.storage.sync.get({
         currentWindowOnly: false,
         blockedURLs: []
     }, function (items) {
         document.getElementById('current-window').checked = items.currentWindowOnly;
-        updateBlacklist(items.blockedURLs, false);
+        refreshBlacklist(items.blockedURLs, false);
     });
 }
 
+/**
+ * Save the new checkbox option for 'Search for tabs in the current window only' and show a success message
+ */
 function saveWindowOption() {
-    chrome.storage.sync.get({
-        currentWindowOnly: false,
-        blockedURLs: []
-    }, function (obj) {
+    chrome.storage.sync.get({currentWindowOnly: false}, function () {
         var checked = document.getElementById('current-window').checked;
-        chrome.storage.sync.set({currentWindowOnly: checked, blockedURLs: obj.blockedURLs}, function () {
+        chrome.storage.sync.set({currentWindowOnly: checked}, function () {
             insertHTML('general', SUCCESS);
         });
     });
 }
 
+/**
+ * Add a new URL to the list of blocked URLs in the user settings
+ */
 function addBlacklistURL() {
     var url = document.getElementById('blacklist-url').value;
+    // If url contains `://` (i.e. http, https) we automatically remove it for the user
+    if (url.indexOf("://") > -1)
+        url = url.split('/')[2];
+    // If the url is invalid, show a message and exit the function
     if (url.length == 0 || !validURL(url)) {
         insertHTML('blacklist-add', INVALID);
         return;
     }
-
-    chrome.storage.sync.get({
-        currentWindowOnly: false,
-        blockedURLs: []
-    }, function (obj) {
+    // Get the existing list of blocked URLs, check if the url already exists and push and set it as required
+    chrome.storage.sync.get({blockedURLs: []}, function (obj) {
         var urls = obj.blockedURLs;
         if (urls.indexOf(url) > -1) {
             insertHTML('blacklist-add', EXISTS);
             return;
         }
-
         urls.push(url);
-        chrome.storage.sync.set({
-            currentWindowOnly: obj.currentWindowOnly,
-            blockedURLs: urls
-        }, function () {
+        chrome.storage.sync.set({blockedURLs: urls}, function () {
             insertHTML('blacklist-add', ADDED);
-            updateBlacklist(url, true);
+            refreshBlacklist(url, true);
         });
     });
 }
 
-function updateBlacklist(url, newURL) {
+/**
+ * Given a URL or list of URLs, update the select option blacklist box with these new additions
+ */
+function refreshBlacklist(url, newURL) {
     document.getElementById('blacklist-url').value = '';
     if (newURL) {
-        var html = '<option value=' + url + '>' + url + '</option>';
-        document.getElementById('blacklisted').innerHTML += html;
+        // Append the new URL to the end of the existing ones
+        document.getElementById('blacklisted').innerHTML += '<option value=' + url + '>' + url + '</option>';
     } else {
+        // Go through each of the new URLs, build a total HTML string and set the blacklist box
         var total = '';
         url.forEach(function (url) {
             total += '<option value=' + url + '>' + url + '</option>\n';
@@ -100,45 +110,59 @@ function updateBlacklist(url, newURL) {
     }
 }
 
+/**
+ * Handle when the user clicks 'Remove' to remove an item/items from the blacklist
+ */
 function removeClick() {
     var options = document.getElementById('blacklisted').selectedOptions;
+    // If no options have been selected, show that as a message
     if (options.length == 0)
         insertHTML('blacklist-remove', NO_ITEM);
+    // Create an array of the values (i.e. URLs) of the options
+    var urls = [];
     for (var i = 0; i < options.length; i++)
-        removeURL(options[i].value);
+        urls.push(options[i].value);
+    // Remove the URLs
+    removeURLs(urls);
 }
 
-function removeURL(url) {
+/**
+ * Given a list of URLs, we remove them from the blocked URLs list of the user settings
+ */
+function removeURLs(toRemove) {
     chrome.storage.sync.get({blockedURLs: []}, function (obj) {
+        // Remove the newly removed URLs from the user settings list
         var urls = obj.blockedURLs;
-        var index = urls.indexOf(url);
-
-        if (index > -1) {
-            urls.splice(index, 1);
-        } else {
-            insertHTML('blacklist-remove', ERROR);
-            return;
-        }
-
+        urls = urls.filter(function (url) {
+            return toRemove.indexOf(url) == -1;
+        });
+        // Set the user settings to the new blacklisted URLs, display a message and refresh the blacklist box
         chrome.storage.sync.set({blockedURLs: urls}, function () {
             insertHTML('blacklist-remove', REMOVED);
-            updateBlacklist(urls, false);
+            refreshBlacklist(urls, false);
         });
     });
 }
 
+/**
+ * We run this code when the options page is opened
+ */
 document.addEventListener('DOMContentLoaded', function () {
+    // Restore state from current user settings
     restoreOptions();
 
+    // Create event listener for the checkbox
     document.getElementById('current-window').addEventListener('click', function () {
         saveWindowOption();
     });
 
+    // Create event listener in the Blacklist text box which listens for the 'Enter' key
     document.getElementById('blacklist-url').addEventListener('keydown', function (e) {
         if (e.keyCode == '13')
             addBlacklistURL();
     });
 
+    // Create event listeners for adding blacklist URLs and removing them
     document.getElementById('url-submission').addEventListener('click', function () {
         addBlacklistURL();
     });
