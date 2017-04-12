@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add event listener to open options page on click of settings cog
     document.getElementById('settings').addEventListener('click', function () {
-        console.log('wtf m8?');
         chrome.tabs.create({url: "options.html"});
     });
 });
