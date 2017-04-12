@@ -46,14 +46,12 @@ function muteNewTab(tab) {
 }
 
 function muteNewURL(tabId, changeInfo, tab) {
-    console.log("A refresh has been detected");
-    console.log("The following are blocked" + blockedDomains);
-    if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && tab.audible && changeInfo.url !== undefined) { // if the tab's url belongs to the blocked ones
-        console.log("Tab satisifes properties");
+    if (blockedDomains.indexOf(getDomain(tab.url)) > -1 && tab.audible && changeInfo.audible) { // if the tab's url belongs to the blocked ones
+        console.log(changeInfo);
+        console.log(tab);
         muteTab(tab);
     }
 }
-
 
 function begin() {
     chrome.storage.sync.get({blockedURLs: []}, function (object) {
@@ -65,9 +63,6 @@ function begin() {
     });
 
     chrome.storage.onChanged.addListener(function (changes, areaName) {
-        if (changes.blockedURLs !== undefined) {
-            console.log('Detected change in urls. The changes are ' + changes.blockedURLs.newValue);
-        }
         chrome.storage.sync.get({blockedURLs: []}, function (obj) {
             blockedDomains = [];
             for (var i = 0; i < obj.blockedURLs.length; i++) {
