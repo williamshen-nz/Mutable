@@ -23,7 +23,7 @@ function validURL(url) {
 
 /**
  * Clean a URL and return root domain (including sub-domains)
- * Modified from: http://stackoverflow.com/a/23945027/6063947
+ * Modified from: http://stackoverflow.com/questions/25703360/
  */
 function getDomain(url) {
     var a = document.createElement('a');
