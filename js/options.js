@@ -25,6 +25,8 @@ function validURL(url) {
  * Modified from: http://stackoverflow.com/questions/25703360/
  */
 function getDomain(url) {
+    if (url.indexOf('://') == -1)
+        url = 'https://' + url;
     var a = document.createElement('a');
     a.setAttribute('href', url);
     return a.hostname;
