@@ -1,8 +1,7 @@
 /**
  * The code here is used to build a button with the relevant icons and
- * text, and then insert it into the popup HTML page.
+ * text, and then insert return it as HTML
  */
-
 const INIT = '<button id="';
 const BUTTON = '" class="btn-tab">';
 const MUTED = '<i class="fa fa-volume-off" aria-hidden="true" style="color: #F44336"></i>';
@@ -25,4 +24,3 @@ function getButtonHTML(isMuted, title, id) {
 function getInnerHTML(isMuted, title) {
     return (isMuted ? MUTED : UNMUTED) + TITLE + title + '</span>';
 }
-
