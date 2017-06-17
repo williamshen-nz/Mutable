@@ -17,3 +17,9 @@ ___
 * Muting and un-muting tabs via an intuitive pop-up window
 * Searching through tabs in either the current window or across all windows
 * Blacklist with auto-muting capability
+
+___
+
+## Contributors
+* [William Shen](https://github.com/williamshen-nz)
+* [Manal Mohania](https://github.com/manalmohania)
